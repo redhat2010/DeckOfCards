@@ -60,7 +60,7 @@ class Deck:
                 self.shuffle()
             return self.cards.pop(0)
         elif x == len(self.cards):
-            return_list = self.cards
+            return_list = self.cards.copy()
             self.cards = []
             return return_list
         else:
@@ -77,7 +77,7 @@ class Deck:
         if x == 1:
             return self.discards.pop(0)
         elif x == len(self.discards):
-            return_list = self.discards
+            return_list = self.discards.copy()
             self.discards = []
             return return_list
         else:
@@ -86,6 +86,20 @@ class Deck:
                 return_list.append(self.draw_discarded())
             return return_list
     
+    # checks the top x card from the deck
+    def check(self,x=1):
+        self.remove_null()
+        if x == 1:
+            if self.cards_left() == 0 and self.cards_discarded() > 0:
+                self.insert_cards(self.draw_discarded(self.cards_discarded()))
+                self.shuffle()
+            return self.cards[0]
+        else:
+            return_list = []
+            for i in range(x):
+                return_list.append(self.check())
+            return return_list
+
     # adds 1 or more cards to the discard pile
     def discard(self,new_cards):
         # if the new_cards are in a deck, draws all cards from that deck and inserts them
